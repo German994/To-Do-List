@@ -1,12 +1,25 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>To-Do List</title>
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-  <script src="js/script.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>To-Do List</h1>
+      <form onsubmit="saveTask(event)">
+        <input
+          type="text"
+          name="name"
+          id="name"
+          placeholder="Nombre de la Tarea"
+        />
+        <button type="submit">Agregar Tarea</button>
+      </form>
+      <div id="list-task"></div>
+    </main>
+    <script src="js/script.js"></script>
+  </body>
 </html>
