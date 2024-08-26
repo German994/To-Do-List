@@ -7,8 +7,10 @@
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
-    <main class="container">
+    <header>
       <h1>To-Do List</h1>
+    </header>
+    <main class="tasks-form">
       <form onsubmit="saveTask(event)">
         <input
           type="text"
@@ -19,8 +21,9 @@
         />
         <button type="submit">Agregar Tarea</button>
       </form>
-      <div id="list-task">
+      <div id="tasks-element">
         <ul id="list-task__pending"></ul>
+        <ul id="list-task__completed"></ul>
       </div>
     </main>
     <script src="js/script.js"></script>

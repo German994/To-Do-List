@@ -1,4 +1,4 @@
-// Método para capturar la información de los inputs y guardarlo en el localStorage
+// Capturar la información de los inputs y guardarlo en el localStorage
 function saveTask(event) {
   event.preventDefault(); // Evita la redirection.
   const form = event.target; // Captura el elemento 'form'.
@@ -15,27 +15,48 @@ function saveTask(event) {
 }
 
 // Muestra la lista actualizada de tareas en el HTML.
-function displayTasks(newToDoList) {
-  const pendingTasks = document.querySelector("#list-task__pending"); // Etiqueta donde se mostraran las 'task' pendientes.
-  // Verifica si el elemento no existe en el HTML.
-  if (!pendingTasks) {
-    console.error("El elemento no existe");
+function displayTasks(tasks) {
+  const pendingTasksElement = document.querySelector("#list-task__pending"); // Etiqueta donde se mostraran las 'task' pendientes.
+  const completedTasksElement = document.querySelector("#list-task__completed"); // Etiqueta donde se mostraran las 'task' completadas.
+  // Verifica si los elemento no existe en el HTML.
+  if (!pendingTasksElement && !completedTasksElement) {
+    console.error(
+      "Los elementos pending-tasks-list o completed-tasks-list no existen"
+    );
     return;
   }
   // Convierte la tareas en etiquetas HTML.
-  const pendingTasksHtml = newToDoList.map((task) => {
-    return `
-      <span><input class="t__input" type="checkbox" id="t-input" /></span>
-      <li>${task.name}</li>
+  const pendingTasksHtml = tasks
+    .filter((task) => !task.completed)
+    .map((task) => {
+      return `
+      <li class="task__pending">
+        <input type="checkbox" id="task-checkbox__${task.id}" />
+        <span id="task-name__${task.id}" >${task.name}</span>
+        <button onclick="deleteTask('${task.id}')">X</button>
+      </li>
     `;
-  });
-  pendingTasks.innerHTML = pendingTasksHtml.join(""); // Inserta etiqueta HTML en el elemento '#list-task__pending'.
+    });
+  const completedTasksHtml = tasks
+    .filter((task) => task.completed)
+    .map((task) => {
+      return `
+      <li class="task__completed">
+        <input type="checkbox" id="task-checkbox__${task.id}" checked />
+        <span id="task-name__${task.id}" >${task.name}</span>
+        <button onclick="deleteTask('${task.id}')">X</button>
+      </li>
+    `;
+    });
+  pendingTasksElement.innerHTML = pendingTasksHtml.join(""); // Inserta etiqueta HTML en el elemento '#list-task__pending'.
+  completedTasksElement.innerHTML = completedTasksHtml.join(""); // Inserta etiqueta HTML en el elemento '#list-task__completed'.
+  checkTasks(tasks);
 }
 
 // Obtiene desde localStorage la información de las tareas almacenadas.
 function getTaskFromMemory() {
   const toDoListFromMemory = localStorage.getItem("toDoList"); // Recupera la cadena de texto almacenada en localStorage bajo la clave "toDoList".
-// Si toDoListFromMemory es un valor falsy, se guarda una lista vacía  y retorna un array vacío.
+  // Si toDoListFromMemory es un valor falsy, se guarda una lista vacía  y retorna un array vacío.
   if (!toDoListFromMemory) {
     saveTaskForMemory([]);
     return [];
@@ -49,7 +70,27 @@ function saveTaskForMemory(tasks) {
 
 // Genera una id única
 function generateUniqueId() {
-  return "task-" + Date.now().toString(36); // Nombre de la tarea en milisegundos y en base 36
+  return "task-" + Date.now().toString(36); // Nombre de la tarea en mili-segundos y en base 36
+}
+
+// Elimina una tarea del localStorage
+function deleteTask(idTask) {
+  const tasks = getTaskFromMemory();
+  const tasksFiltered = tasks.filter((task) => task.id !== idTask); // Guarda en 'tasksFiltered' la tarea a eliminar
+  saveTaskForMemory(tasksFiltered);
+  displayTasks(tasksFiltered);
+}
+
+// Asigna el evento al checkbox para la actualización y visualización de las tareas.
+function checkTasks(tasks) {
+  tasks.forEach((task) => {
+    const checkbox = document.querySelector(`#task-checkbox__${task.id}`);
+    checkbox.addEventListener("change", () => {
+      task.completed = checkbox.checked; // Actualizar el estado de 'completed' de la tarea en función del estado del checkbox
+      saveTaskForMemory(tasks);
+      displayTasks(tasks);
+    });
+  });
 }
 
 // Añade un event listener al documento. Se ejecuta cuando todo el contenido del DOM ha sido cargado.
