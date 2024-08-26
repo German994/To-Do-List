@@ -50,7 +50,7 @@ function displayTasks(tasks) {
     });
   pendingTasksElement.innerHTML = pendingTasksHtml.join(""); // Inserta etiqueta HTML en el elemento '#list-task__pending'.
   completedTasksElement.innerHTML = completedTasksHtml.join(""); // Inserta etiqueta HTML en el elemento '#list-task__completed'.
-  checkTasks(tasks);
+  changeTasksState(tasks);
 }
 
 // Obtiene desde localStorage la información de las tareas almacenadas.
@@ -82,7 +82,7 @@ function deleteTask(idTask) {
 }
 
 // Asigna el evento al checkbox para la actualización y visualización de las tareas.
-function checkTasks(tasks) {
+function changeTasksState(tasks) {
   tasks.forEach((task) => {
     const checkbox = document.querySelector(`#task-checkbox__${task.id}`);
     checkbox.addEventListener("change", () => {
