@@ -32,8 +32,10 @@ function displayTasks(tasks) {
       return `
       <li class="task__pending">
         <input type="checkbox" id="task-checkbox__${task.id}" />
+        <button onclick="deleteTask('${task.id}')">
+        <span class="material-symbols-outlined" style="color: #ff0000;">delete_forever</span>
+        </button>
         <span id="task-name__${task.id}" >${task.name}</span>
-        <button onclick="deleteTask('${task.id}')">X</button>
       </li>
     `;
     });
@@ -43,8 +45,10 @@ function displayTasks(tasks) {
       return `
       <li class="task__completed">
         <input type="checkbox" id="task-checkbox__${task.id}" checked />
+        <button onclick="deleteTask('${task.id}')">
+        <span class="material-symbols-outlined" style="color: #ff0000;">delete_forever</span>
+        </button>
         <span id="task-name__${task.id}" >${task.name}</span>
-        <button onclick="deleteTask('${task.id}')">X</button>
       </li>
     `;
     });
